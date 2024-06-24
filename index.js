@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const wearhouseRoute = require('./routes/wearhouse.routes')
 const productRoute = require('./routes/product.routes')
+const orderRoute = require('./routes/order.routes')
 
 
 
@@ -14,7 +15,8 @@ const PORT = process.env.port || 3000
 app.use(cors())
 app.use('/api', wearhouseRoute)
 app.use('/api', productRoute)
-
+app.use('/api', orderRoute)
+app.use('/ping', (req, res) => {res.send('pong')})
 
 
 

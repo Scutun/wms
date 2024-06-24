@@ -9,7 +9,7 @@ class wearhouseController{
         try{
             const {name, address} = req.body
             
-            const newWearhouse = await db.query(`insert into wearhouse(name, address) values ($1, $2) returning wearhouse_id`, [name, address])
+            const newWearhouse = await db.query(`insert into wearhouse(name, address) values ($1, $2) returning wearhouse_id as id`, [name, address])
             console.log('2')
             res.json(newWearhouse.rows[0])
         }

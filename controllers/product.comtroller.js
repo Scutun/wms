@@ -6,9 +6,10 @@ class productController{
 
     async createProduct(req, res) {
         try{
-            const {name, price, wearhouse, serialNumber, line, column} = req.body
-            const newProduct = await db.query(`insert into product (name, price, fk_wearhouse_id, serial_number, line, "column")
-                values ($1, $2, $3, $4, $5, $6) returning product_id`, [name, price, wearhouse, serialNumber, line, column])
+            const {name, price, wearhouse, serialNumber, line, column, amount, weight, volume} = req.body
+            const newProduct = await db.query(`insert into product (name, price, fk_wearhouse_id, serial_number, line, "column", amount, weight, volume)
+                values ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+                returning product_id`, [name, price, wearhouse, serialNumber, line, column, amount, weight, volume])
                 
             res.json(newProduct.rows[0])    
         }
@@ -22,7 +23,7 @@ class productController{
 
         try{
             const id = req.params.id
-            const findProduct = await db.query(`select product_id as id, name, price, serial_number as serialNumber, line, "column" from product
+            const findProduct = await db.query(`select product_id as id, name, price, serial_number as serialNumber, line, "column", amount, weight, volume from product 
                 where fk_wearhouse_id = $1`, [id])
             res.json(findProduct.rows)
         }
@@ -34,10 +35,10 @@ class productController{
 
     async updateProduct(req, res) {
         try{
-            const {id, name, price, serialNumber, line, column} = req.body
+            const {id, name, price, serialNumber, line, column, amount, weight, volume} = req.body
 
-            const update = await db.query(`update product set name = $1, price = $2, serial_number = $3, line = $4, "column" = $5 
-                where product_id = $6`, [name, price, serialNumber, line, column, id])
+            const update = await db.query(`update product set name = $1, price = $2, serial_number = $3, line = $4, "column" = $5, amount = $6, weight = $7, volume = $8 
+                where product_id = $9`, [name, price, serialNumber, line, column, amount, weight, volume, id])
 
             res.json(id)
         }

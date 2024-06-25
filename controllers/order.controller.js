@@ -79,6 +79,19 @@ class orderController {
     }
 
 
+    async getOneOrder(req, res) {
+        try {
+            const id = req.params.id
+
+            const order = await db.query(`select order_id as id, total_price as price, total_weight as weight, total_volume as volume,
+                products_names as names, like_amount as like, fac_amount as fact from orders where order_id = $1`, [id])
+            res.json(order.rows[0])
+        }
+        catch (e) {
+            res.sendStatus(404)
+        }
+    }
+
     async deleteOrder(req, res) {
         try {
             const id = req.params.id

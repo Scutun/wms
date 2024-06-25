@@ -1,6 +1,6 @@
 const Router = require('express')
 const router = new Router()
-const productController = require('../controllers/product.comtroller')
+const productController = require('../controllers/product.controller')
 
 router.post('/product/create', productController.createProduct)
 router.put('/product/update', productController.updateProduct)

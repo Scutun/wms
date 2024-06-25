@@ -6,11 +6,19 @@ class productController{
 
     async createProduct(req, res) {
         try{
-            const {name, price, wearhouse, serialNumber, line, column, amount, weight, volume} = req.body
-            const newProduct = await db.query(`insert into product (name, price, fk_wearhouse_id, serial_number, line, "column", amount, weight, volume)
-                values ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-                returning product_id`, [name, price, wearhouse, serialNumber, line, column, amount, weight, volume])
-                
+            const {name, price, serialNumber, line, column, amount, weight, volume} = req.body
+            
+            const newProduct = await db.query(`insert into product (name, price, serial_number, line, "column", amount, weight, volume)
+                values ($1, $2, $3, $4, $5, $6, $7, $8) returning *`, [name, price, serialNumber, line, column, amount, weight, volume])
+
+
+            const serial = newProduct.rows[0].serial_number
+            
+            delete newProduct.rows[0].serial_number
+
+            newProduct.rows[0].serialnumber = serial
+
+
             res.json(newProduct.rows[0])    
         }
 
@@ -25,10 +33,10 @@ class productController{
             const id = req.params.id
             const findProduct = await db.query(`select product_id as id, name, price, serial_number as serialNumber, line, "column", amount, weight, volume from product 
                 where fk_wearhouse_id = $1`, [id])
+
             res.json(findProduct.rows)
         }
         catch(e){
-            console.log(e)
             res.sendStatus(404)
         }
     }

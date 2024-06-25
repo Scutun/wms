@@ -56,7 +56,8 @@ class orderController {
             await Promise.all(promises)
 
             const ordering = await db.query(`insert into orders (total_price, total_weight, total_volume, products_names, like_amount, fac_amount)
-                values ($1, $2, $3, $4, $5, $6) returning order_id as id`, [totalPrice, totalWeight, totalVolume, nameArr, likeAmountArr, amountArr]);
+                values ($1, $2, $3, $4, $5, $6) returning order_id as id, total_price as price, total_weight as weight, 
+                total_volume as volume, products_names as names, like_amount as like, fac_amount as fact`, [totalPrice, totalWeight, totalVolume, nameArr, likeAmountArr, amountArr]);
 
             res.json(ordering.rows[0]);
         }
@@ -68,8 +69,8 @@ class orderController {
 
     async getOrder(req, res) {
         try {
-            const order = await db.query(`select total_price as price, total_weight as weight, total_volume as volume,
-                products_names as products, like_amount as likeAmount, fac_amount as facAmount from orders`)
+            const order = await db.query(`select order_id as id, total_price as price, total_weight as weight, total_volume as volume,
+                products_names as names, like_amount as like, fac_amount as fact from orders`)
             res.json(order.rows)
         }
         catch (e) {

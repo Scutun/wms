@@ -16,7 +16,6 @@ app.use(cors())
 app.use('/api', wearhouseRoute)
 app.use('/api', productRoute)
 app.use('/api', orderRoute)
-app.use('/ping', (req, res) => {res.send('pong')})
 
 
 
